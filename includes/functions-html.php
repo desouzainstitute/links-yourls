@@ -8,7 +8,7 @@ function yourls_html_logo() {
 	yourls_do_action( 'pre_html_logo' );
 	?>
 	<h1>
-		<a href="<?php echo yourls_admin_url( 'index.php' ) ?>" title="YOURLS"><span>YOURLS</span>: <span>Y</span>our <span>O</span>wn <span>URL</span> <span>S</span>hortener<br/>
+	
 		<img src="<?php yourls_site_url(); ?>/images/yourls-logo.png" alt="YOURLS" title="YOURLS" border="0" style="border: 0px;" /></a>
 	</h1>
 	<?php
@@ -72,7 +72,7 @@ function yourls_html_head( $context = 'index', $title = '' ) {
 	$bodyclass .= ( yourls_is_mobile_device() ? 'mobile' : 'desktop' );
 	
 	// Page title
-	$_title = 'YOURLS &mdash; Your Own URL Shortener | ' . yourls_link();
+	$_title = 'de Souza Institute Link Shortener | ' . yourls_link();
 	$title = $title ? $title . " &laquo; " . $_title : $_title;
 	$title = yourls_apply_filter( 'html_title', $title, $context );
 	
@@ -136,27 +136,7 @@ function yourls_html_head( $context = 'index', $title = '' ) {
  *
  */
 function yourls_html_footer() {
-	global $ydb;
 	
-	$num_queries = sprintf( yourls_n( '1 query', '%s queries', $ydb->num_queries ), $ydb->num_queries );
-	?>
-	</div> <?php // wrap ?>
-	<div id="footer"><p>
-		<?php
-		$footer  = yourls_s( 'Powered by %s', '<a href="http://yourls.org/" title="YOURLS">YOURLS</a> v ' . YOURLS_VERSION );
-		$footer .= ' &ndash; '.$num_queries;
-		echo yourls_apply_filters( 'html_footer_text', $footer );
-		?>
-	</p></div>
-	<?php if( defined( 'YOURLS_DEBUG' ) && YOURLS_DEBUG == true ) {
-		echo '<div style="text-align:left"><pre>';
-		echo join( "\n", $ydb->debug_log );
-		echo '</div>';
-	} ?>
-	<?php yourls_do_action( 'html_footer', $ydb->context ); ?>
-	</body>
-	</html>
-	<?php
 }
 
 /**
@@ -331,7 +311,7 @@ function yourls_html_tfooter( $params = array() ) {
  * @param array $options array of 'value' => 'Text displayed'
  * @param string $selected optional 'value' from the $options array that will be highlighted
  * @param boolean $display false (default) to return, true to echo
- * @return string HTML content of the select element
+ * @return HTML content of the select element
  */
 function yourls_html_select( $name, $options, $selected = '', $display = false ) {
 	$html = "<select name='$name' id='$name' size='1'>\n";
@@ -394,22 +374,28 @@ function yourls_share_box( $longurl, $shorturl, $title = '', $text='', $shortlin
 
 		<?php yourls_do_action( 'shareboxes_middle', $longurl, $shorturl, $title, $text ); ?>
 
-		<div id="sharebox" class="share">
-			<?php echo $share_title; ?>
+		<!-- <div 
+		<!-- id="sharebox" class="share" -->
+		<!-- > -->
+		<!--	<?php //echo $share_title; ?>
 			<div id="tweet">
 				<span id="charcount" class="hide-if-no-js"><?php echo $count; ?></span>
 				<textarea id="tweet_body"><?php echo $share; ?></textarea>
 			</div>
-			<p id="share_links"><?php yourls_e( 'Share with' ); ?> 
+	    -->
+		<!--	<p id="share_links"><?php yourls_e( 'Share with' ); ?> 
 				<a id="share_tw" href="http://twitter.com/home?status=<?php echo $_share; ?>" title="<?php yourls_e( 'Tweet this!' ); ?>" onclick="share('tw');return false">Twitter</a>
 				<a id="share_fb" href="http://www.facebook.com/share.php?u=<?php echo $_url; ?>" title="<?php yourls_e( 'Share on Facebook' ); ?>" onclick="share('fb');return false;">Facebook</a>
 				<a id="share_ff" href="http://friendfeed.com/share/bookmarklet/frame#title=<?php echo $_share; ?>" title="<?php yourls_e( 'Share on Friendfeed' ); ?>" onclick="share('ff');return false;">FriendFeed</a>
+				-->
+				
 				<?php
-				yourls_do_action( 'share_links', $longurl, $shorturl, $title, $text );
+				//yourls_do_action( 'share_links', $longurl, $shorturl, $title, $text );
 				// Note: on the main admin page, there are no parameters passed to the sharebox when it's drawn.
 				?>
 			</p>
 		</div>
+
 		
 		<?php yourls_do_action( 'shareboxes_after', $longurl, $shorturl, $title, $text ); ?>
 	
@@ -445,6 +431,9 @@ function yourls_die( $message = '', $title = '', $header_code = 200 ) {
  * @return string HTML of the edit row
  */
 function yourls_table_edit_row( $keyword ) {
+	global $ydb;
+	
+	$table = YOURLS_DB_TABLE_URL;
 	$keyword = yourls_sanitize_string( $keyword );
 	$id = yourls_string2htmlid( $keyword ); // used as HTML #id
 	$url = yourls_get_keyword_longurl( $keyword );
@@ -454,6 +443,10 @@ function yourls_table_edit_row( $keyword ) {
 	$safe_title = yourls_esc_attr( $title );
 	$www = yourls_link();
 	
+	$save_link = yourls_nonce_url( 'save-link_'.$id,
+		yourls_add_query_arg( array( 'id' => $id, 'action' => 'edit_save', 'keyword' => $keyword ), yourls_admin_url( 'admin-ajax.php' ) ) 
+	);
+	
 	$nonce = yourls_create_nonce( 'edit-save_'.$id );
 	
 	if( $url ) {
@@ -462,7 +455,7 @@ function yourls_table_edit_row( $keyword ) {
 RETURN;
 		$return = sprintf( urldecode( $return ), yourls__( 'Long URL' ), yourls__( 'Short URL' ), yourls__( 'Title' ), yourls__( 'Save' ), yourls__( 'Save new values' ), yourls__( 'Cancel' ), yourls__( 'Cancel editing' ) );
 	} else {
-		$return = '<tr class="edit-row notfound"><td colspan="6" class="edit-row notfound">' . yourls__( 'Error, URL not found' ) . '</td></tr>';
+		$return = '<tr class="edit-row notfound">><td colspan="6" class="edit-row notfound">' . yourls__( 'Error, URL not found' ) . '</td></tr>';
 	}
 	
 	$return = yourls_apply_filter( 'table_edit_row', $return, $keyword, $url, $title );
@@ -694,11 +687,13 @@ function yourls_html_menu() {
 
 	// Build menu links
 	if( defined( 'YOURLS_USER' ) ) {
-		$logout_link = yourls_apply_filter( 'logout_link', sprintf( yourls__('Hello <strong>%s</strong>'), YOURLS_USER ) . ' (<a href="?action=logout" title="' . yourls_esc_attr__( 'Logout' ) . '">' . yourls__( 'Logout' ) . '</a>)' );
+		$logout_link = yourls_apply_filter( 'logout_link', sprintf( yourls__('Hello <strong>%s</strong>'), YOURLS_USER ) . ' </strong> (<a href="?action=logout" title="' . yourls_esc_attr__( 'Logout' ) . '">' . yourls__( 'Logout' ) . '</a>)' );
 	} else {
 		$logout_link = yourls_apply_filter( 'logout_link', '' );
 	}
-	$help_link   = yourls_apply_filter( 'help_link',   '<a href="' . yourls_site_url( false ) .'/readme.html">' . yourls__( 'Help' ) . '</a>' );
+	
+	// Took away the help link
+	//	$help_link   = yourls_apply_filter( 'help_link',   '<a href="' . yourls_site_url( false ) .'/readme.html">' . yourls__( 'Help' ) . '</a>' );
 	
 	$admin_links    = array();
 	$admin_sublinks = array();
@@ -706,7 +701,7 @@ function yourls_html_menu() {
 	$admin_links['admin'] = array(
 		'url'    => yourls_admin_url( 'index.php' ),
 		'title'  => yourls__( 'Go to the admin interface' ),
-		'anchor' => yourls__( 'Admin interface' )
+		'anchor' => yourls__( 'Add/Edit Shortlinks' )
 	);
 	
 	if( yourls_is_admin() ) {
@@ -768,8 +763,7 @@ function yourls_html_menu() {
  *
  */
 function yourls_add_notice( $message, $style = 'notice' ) {
-	// Escape single quotes in $message to avoid breaking the anonymous function
-	$message = yourls_notice_box( strtr( $message, array( "'" => "\'" ) ), $style );
+	$message = yourls_notice_box( $message, $style );
 	yourls_add_action( 'admin_notices', create_function( '', "echo '$message';" ) );
 }
 
@@ -791,11 +785,11 @@ HTML;
  */
 function yourls_page( $page ) {
 	$include = YOURLS_ABSPATH . "/pages/$page.php";
-	if( !file_exists( $include ) ) {
+	if( !file_exists($include) ) {
 		yourls_die( "Page '$page' not found", 'Not found', 404 );
 	}
 	yourls_do_action( 'pre_page', $page );
-	include( $include );
+	include($include);
 	yourls_do_action( 'post_page', $page );
 	die();	
 }
@@ -846,24 +840,3 @@ function yourls_l10n_calendar_strings() {
 	yourls__( 'Today' );
 	yourls__( 'Close' );
 }
-
-/**
- * Display custom message based on query string parameter 'login_msg'
- *
- * @since 1.7
- */
-function yourls_display_login_message() {
-	if( !isset( $_GET['login_msg'] ) )
-		return;
-	
-	switch( $_GET['login_msg'] ) {
-		case 'pwdclear':
-			$message  = '';
-			$message .= yourls__( '<strong>Notice</strong>: your password is stored as clear text in your <tt>config.php</tt>' );
-			$message .= ' ' . yourls__( 'Did you know you can easily improve the security of your YOURLS install by <strong>encrypting</strong> your password?' );
-			$message .= ' ' . yourls__( 'See <a href="http://yourls.org/userpassword">UsernamePassword</a> for details' );
-			yourls_add_notice( $message, 'notice' );
-			break;
-	}
-}
-

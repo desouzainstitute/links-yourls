@@ -3,19 +3,19 @@
 ############
 
 # Configuration
-user/*
-!user/config-sample.php
+user/config.php
 .htaccess
 *.config
-*.conf
-[Rr]obots.txt
+robots.txt
 
 # Languages
 user/languages/*
 !user/languages/
 
 # Plugins
-user/plugins/*
+# user/plugins/*
+# We want to backup the plugins we used
+
 # Core plugins
 !user/plugins/hyphens-in-urls/
 !user/plugins/random-bg/
@@ -27,9 +27,6 @@ user/plugins/*
 pages/*
 !pages/examplepage.php
 
-# Keep index.html
-!user/index.html
-!user/*/index.html
 
 ############
 ## Environnement
