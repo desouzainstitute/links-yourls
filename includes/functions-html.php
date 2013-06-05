@@ -147,12 +147,14 @@ function yourls_html_footer() {
  */
 function yourls_html_addnew( $url = '', $keyword = '' ) {
 	$url = $url ? $url : 'http://';
+    /** What was supposed to be on the blank line 156: <?php yourls_e( 'Optional '); ?>:  **/
 	?>
 	<div id="new_url">
 		<div>
 			<form id="new_url_form" action="" method="get">
-				<div><strong><?php yourls_e( 'Enter the URL' ); ?></strong>:<input type="text" id="add-url" name="url" value="<?php echo $url; ?>" class="text" size="80" />
-				<?php yourls_e( 'Optional '); ?>: <strong><?php yourls_e('Custom short URL'); ?></strong>:<input type="text" id="add-keyword" name="keyword" value="<?php echo $keyword; ?>" class="text" size="8" />
+				<div><strong><?php yourls_e( 'Enter the URL' ); ?></strong>:&nbsp;<input type="text" id="add-url" name="url" value="<?php echo $url; ?>" class="text" size="80" />
+				 
+                 &nbsp;&nbsp;<strong><?php yourls_e('Custom short URL'); ?></strong>:&nbsp;<input type="text" id="add-keyword" name="keyword" value="<?php echo $keyword; ?>" class="text" size="8" />
 				<?php yourls_nonce_field( 'add_url', 'nonce-add' ); ?>
 				<input type="button" id="add-button" name="add-button" value="<?php yourls_e( 'Shorten The URL' ); ?>" class="button" onclick="add_link();" /></div>
 			</form>
@@ -592,8 +594,8 @@ function yourls_table_head() {
 	$cells = yourls_apply_filter( 'table_head_cells', array(
 		'shorturl' => yourls__( 'Short URL' ),
 		'longurl'  => yourls__( 'Original URL' ),
-		'date'     => yourls__( 'Date' ),
-		'ip'       => yourls__( 'IP' ),
+		'date'     => yourls__( 'Date Created' ),
+		'ip'       => yourls__( 'IP of Creator' ),
 		'clicks'   => yourls__( 'Clicks' ),
 		'actions'  => yourls__( 'Actions' )
 	) );
