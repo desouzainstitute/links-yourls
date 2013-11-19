@@ -3,7 +3,7 @@
 ############
 
 # Configuration
-user/*
+# user/* - commented out to include plugins
 !user/config-sample.php
 .htaccess
 *.config
@@ -15,7 +15,7 @@ user/languages/*
 !user/languages/
 
 # Plugins
-user/plugins/*
+# user/plugins/* - commented out to include plugins
 # Core plugins
 !user/plugins/hyphens-in-urls/
 !user/plugins/random-bg/
