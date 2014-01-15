@@ -60,6 +60,7 @@ function yourls_html_head( $context = 'index', $title = '' ) {
 		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 		header( 'Cache-Control: no-cache, must-revalidate, max-age=0' );
 		header( 'Pragma: no-cache' );
+		yourls_content_type_header( yourls_apply_filters( 'html_head_content-type', 'text/html' ) );
 		yourls_do_action( 'admin_headers', $context, $title );
 	}
 	
@@ -82,7 +83,7 @@ function yourls_html_head( $context = 'index', $title = '' ) {
 <head>
 	<title><?php echo $title ?></title>
 	<link rel="shortcut icon" href="<?php yourls_favicon(); ?>" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="<?php echo yourls_apply_filters( 'html_head_meta_content-type', 'text/html; charset=utf-8' ); ?>" />
 	<meta http-equiv="X-UA-Compatible" content="IE-9"/>
 	<meta name="author" content="Ozh RICHARD & Lester CHAN for http://yourls.org/" />
 	<meta name="generator" content="YOURLS <?php echo YOURLS_VERSION ?>" />
@@ -870,4 +871,61 @@ function yourls_l10n_calendar_strings() {
 	// Dummy returns, to initialize l10n strings used in the calendar
 	yourls__( 'Today' );
 	yourls__( 'Close' );
+}
+
+
+/**
+ * Display a notice if there is a newer version of YOURLS available
+ *
+ * @since 1.7
+ */
+function yourls_new_core_version_notice() {
+
+	yourls_debug_log( 'Check for new version: ' . ( yourls_maybe_check_core_version() ? 'yes' : 'no' ) );
+	
+	$checks = yourls_get_option( 'core_version_checks' );
+	
+	if( isset( $checks->last_result->latest ) AND version_compare( $checks->last_result->latest, YOURLS_VERSION, '>' ) ) {
+		$msg = yourls_s( '<a href="%s">YOURLS version %s</a> is available. Please update!', 'http://yourls.org/download', $checks->last_result->latest );
+		yourls_add_notice( $msg );
+	}
+}
+
+/**
+ * Send a filerable content type header
+ *
+ * @since 1.7
+ * @param string $type content type ('text/html', 'application/json', ...)
+ * @return bool whether header was sent
+ */
+function yourls_content_type_header( $type ) {
+	if( !headers_sent() ) {
+		$charset = yourls_apply_filters( 'content_type_header_charset', 'utf-8' );
+		header( "Content-Type: $type; charset=$charset" );
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Get search text from query string variables search_protocol, search_slashes and search
+ *
+ * Some servers don't like query strings containing "(ht|f)tp(s)://". A javascript bit
+ * explodes the search text into protocol, slashes and the rest (see JS function
+ * split_search_text_before_search()) and this function glues pieces back together
+ * See issue https://github.com/YOURLS/YOURLS/issues/1576
+ *
+ * @since 1.7
+ * @return string Search string
+ */
+function yourls_get_search_text() {
+	$search = '';
+	if( isset( $_GET['search_protocol'] ) )
+		$search .= $_GET['search_protocol'];
+	if( isset( $_GET['search_slashes'] ) )
+		$search .= $_GET['search_slashes'];
+	if( isset( $_GET['search'] ) )
+		$search .= $_GET['search'];
+	
+	return htmlspecialchars( trim( $search ) );
 }

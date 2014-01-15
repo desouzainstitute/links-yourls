@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Check if server has MySQL 4.1+
+ * Check if server has MySQL 5.0+
  *
  */
 function yourls_check_database_version() {
@@ -16,7 +16,7 @@ function yourls_check_database_version() {
 		yourls_die( yourls__( 'Incorrect DB config, or could not connect to DB' ), yourls__( 'Fatal error' ), 503 );
 	}
 	
-	return ( version_compare( '4.1', $version ) <= 0 );
+	return ( version_compare( '5.0', $version ) <= 0 );
 }
 
 /**
@@ -40,11 +40,11 @@ function yourls_get_database_version() {
 }
 
 /**
- * Check if PHP > 4.3
+ * Check if PHP > 5.2
  *
  */
 function yourls_check_php_version() {
-	return ( version_compare( '4.3', phpversion() ) <= 0 );
+	return ( version_compare( '5.2', phpversion() ) <= 0 );
 }
 
 /**

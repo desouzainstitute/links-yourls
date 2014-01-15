@@ -182,8 +182,7 @@ function yourls_hash_passwords_now( $config_file ) {
 			$configdata = preg_replace( $pattern, $replace, $configdata, -1, $count );
 			// There should be exactly one replacement. Otherwise, fast fail.
 			if ( $count != 1 ) {
-				global $ydb;
-				$ydb->debug_log[] = "Problem with preg_replace for password hash of user $user";
+				yourls_debug_log( "Problem with preg_replace for password hash of user $user" );
 				return 'preg_replace problem';
 			}
 		}
@@ -194,8 +193,7 @@ function yourls_hash_passwords_now( $config_file ) {
 	
 	$success = file_put_contents( $config_file, $configdata );
 	if ( $success === FALSE ) {
-		global $ydb;
-		$ydb->debug_log[] = "Failed writing to " . $config_file;
+		yourls_debug_log( 'Failed writing to ' . $config_file );
 		return 'could not write file';
 	}
 	return true;
@@ -400,6 +398,10 @@ function yourls_store_cookie( $user = null ) {
 	$secure   = yourls_apply_filter( 'setcookie_secure',   yourls_is_ssl() );
 	$httponly = yourls_apply_filter( 'setcookie_httponly', true );
 
+	// Some browser refuse to store localhost cookie
+	if ( $domain == 'localhost' ) 
+		$domain = '';
+   
 	if ( !headers_sent() ) {
 		// Set httponly if the php version is >= 5.2.0
 		if( version_compare( phpversion(), '5.2.0', 'ge' ) ) {
