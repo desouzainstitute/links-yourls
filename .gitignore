@@ -31,6 +31,13 @@ pages/*
 !user/*/index.html
 
 ############
+## Tests
+############
+
+test*.php
+tests/
+
+############
 ## Environnement
 ############
 
@@ -42,3 +49,6 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
+
+# NetBeans files
+/nbproject/
