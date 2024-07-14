@@ -8,9 +8,12 @@
 [Rr]obots.txt
 
 # Ignore everything in user/
-user/*
+# user/* - commented out to include plugins
 # ... except config sample
 !user/config-sample.php
+# - but we do want to exclude our de souza config.php
+user/config.php
+# user/plugins/* - commented out to include plugins
 # ... core plugins
 !user/plugins/hyphens-in-urls/
 !user/plugins/random-bg/
