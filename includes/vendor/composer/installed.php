@@ -3,7 +3,7 @@
         'name' => 'yourls/yourls',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '9f7806c525ef266bb74bdd501463799e45fe2be5',
+        'reference' => '050c11bcd77c01e734bb2e811a73d99950fb88a7',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -72,6 +72,15 @@
             'install_path' => __DIR__ . '/../ozh/bookmarkletgen',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'phpstan/phpstan' => array(
+            'pretty_version' => '1.11.7',
+            'version' => '1.11.7.0',
+            'reference' => '52d2bbfdcae7f895915629e4694e9497d0f8e28d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpstan/phpstan',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'pomo/pomo' => array(
             'pretty_version' => 'v1.5.0',
@@ -148,7 +157,7 @@
         'yourls/yourls' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '9f7806c525ef266bb74bdd501463799e45fe2be5',
+            'reference' => '050c11bcd77c01e734bb2e811a73d99950fb88a7',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),
