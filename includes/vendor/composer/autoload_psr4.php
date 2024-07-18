@@ -14,11 +14,13 @@ return array(
     'Symfony\\Polyfill\\Intl\\Idn\\' => array($vendorDir . '/symfony/polyfill-intl-idn'),
     'Spatie\\ArrayToXml\\' => array($vendorDir . '/spatie/array-to-xml/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'POMO\\' => array($vendorDir . '/pomo/pomo/src'),
     'MaxMind\\WebService\\' => array($vendorDir . '/maxmind/web-service-common/src/WebService'),
     'MaxMind\\Exception\\' => array($vendorDir . '/maxmind/web-service-common/src/Exception'),
     'MaxMind\\Db\\' => array($vendorDir . '/maxmind-db/reader/src/MaxMind/Db'),
     'GeoIp2\\' => array($vendorDir . '/geoip2/geoip2/src'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'Aura\\Sql\\' => array($vendorDir . '/aura/sql/src'),
 );
