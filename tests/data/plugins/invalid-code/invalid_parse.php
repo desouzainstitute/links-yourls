@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Invalid Test Plugin
  * Plugin URI: https://github.com/YOURLS/YOURLS
@@ -11,4 +12,4 @@
 // This plugin does nothing. Its role is to be loaded by the unit tests and
 // see if the sandbox is able to NOT load it.
 
-echo "This plugin should fail"
+echo "This plugin should fail";
